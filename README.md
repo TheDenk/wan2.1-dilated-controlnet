@@ -1,5 +1,9 @@
 # Dilated Controlnet for Wan2.1
 
+
+https://github.com/user-attachments/assets/b5d9620f-1d5d-4841-b49f-03fb702140f7
+
+
 This repo contains the code for dilated controlnet module for Wan2.1 model.  
 Dilated controlnet has `stride` parameter. 
 <p>
