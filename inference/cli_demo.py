@@ -105,9 +105,9 @@ def generate_video(
     text_encoder = UMT5EncoderModel.from_pretrained(base_model_path, subfolder="text_encoder", torch_dtype=torch.bfloat16)
     vae = AutoencoderKLWan.from_pretrained(base_model_path, subfolder="vae", torch_dtype=torch.float32)
     transformer = CustomWanTransformer3DModel.from_pretrained(base_model_path, subfolder="transformer", torch_dtype=torch.bfloat16)
-    # scheduler = FlowMatchEulerDiscreteScheduler.from_pretrained(base_model_path, subfolder="scheduler")
-    flow_shift = 3.0 # 5.0 for 720P, 3.0 for 480P
-    scheduler = UniPCMultistepScheduler(prediction_type='flow_prediction', use_flow_sigmas=True, num_train_timesteps=1000, flow_shift=flow_shift)
+    scheduler = FlowMatchEulerDiscreteScheduler.from_pretrained(base_model_path, subfolder="scheduler")
+    # flow_shift = 3.0 # 5.0 for 720P, 3.0 for 480P
+    # scheduler = UniPCMultistepScheduler(prediction_type='flow_prediction', use_flow_sigmas=True, num_train_timesteps=1000, flow_shift=flow_shift)
 
     controlnet = WanControlnet.from_pretrained(controlnet_model_path, torch_dtype=torch.bfloat16)
     
