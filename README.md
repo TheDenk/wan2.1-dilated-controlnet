@@ -41,7 +41,7 @@ python -m inference.cli_demo \
     --controlnet_type "hed" \
     --controlnet_stride 3 \
     --base_model_path Wan-AI/Wan2.1-T2V-1.3B-Diffusers \
-    --controlnet_model_path TheDenk/wan2.1-t2v-1.3b-controlnetd-hed-v1
+    --controlnet_model_path TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1
 ```
 
 #### Inference with Gradio
@@ -49,7 +49,7 @@ python -m inference.cli_demo \
 python -m inference.gradio_web_demo \
     --controlnet_type "hed" \
     --base_model_path Wan-AI/Wan2.1-T2V-1.3B-Diffusers \
-    --controlnet_model_path TheDenk/wan2.1-t2v-1.3b-controlnetd-hed-v1
+    --controlnet_model_path TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1
 ```
 #### Detailed Inference
 ```bash
@@ -58,7 +58,7 @@ python -m inference.cli_demo \
     --prompt "A balloon filled with water was thrown to the ground, exploding and splashing water in all directions. There were graffiti on the wall, studio lighting, and commercial movie shooting." \
     --controlnet_type "hed" \
     --base_model_path Wan-AI/Wan2.1-T2V-1.3B-Diffusers \
-    --controlnet_model_path TheDenk/wan2.1-t2v-1.3b-controlnetd-hed-v1 \
+    --controlnet_model_path TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1 \
     --controlnet_weight 0.8 \
     --controlnet_guidance_start 0.0 \
     --controlnet_guidance_end 0.8 \

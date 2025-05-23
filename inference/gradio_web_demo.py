@@ -195,7 +195,7 @@ if __name__ == "__main__":
         "--base_model_path", type=str, default="Wan-AI/Wan2.1-T2V-1.3B-Diffusers", help="The path of the pre-trained model to be used"
     )
     parser.add_argument(
-        "--controlnet_model_path", type=str, default="TheDenk/wan2.1-t2v-1.3b-controlnetd-hed-v1", help="The path of the controlnet pre-trained model to be used"
+        "--controlnet_model_path", type=str, default="TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1", help="The path of the controlnet pre-trained model to be used"
     )
     parser.add_argument("--controlnet_type", type=str, default='hed', help="Type of controlnet model (e.g. canny, hed)")
     parser.add_argument("--lora_path", type=str, default=None, help="The path of the LoRA weights to be used")
