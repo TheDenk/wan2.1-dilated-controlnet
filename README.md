@@ -1,11 +1,9 @@
 # Dilated Controlnet for Wan2.1
 
-
-https://github.com/user-attachments/assets/b5d9620f-1d5d-4841-b49f-03fb702140f7
-
+https://github.com/user-attachments/assets/97c0ece2-da42-4425-a0b6-a84929aa4d6e
 
 This repo contains the code for dilated controlnet module for Wan2.1 model.  
-Dilated controlnet has `stride` parameter. 
+Dilated controlnet has less basic blocks and also has `stride` parameter. For Wan1.3B model controlnet blocks count = 8 and stride = 3. 
 <p>
     <img src="./resources/scheme.png" width="750" height="400" title="dilated_scheme"/>
 </p>
