@@ -72,7 +72,7 @@ def main(args):
         out_embeds_path = os.path.join(args.out_embeds_dir, row["video"].replace(".mp4", ".pt"))
         torch.save(prompt_embeds, out_embeds_path)
 
-# CUDA_VISIBLE_DEVICES=0 python prepare_text_embeddints.py \
+# CUDA_VISIBLE_DEVICES=0 python prepare_text_embeddings.py \
 # --csv_path "path to csv" \
 # --out_embeds_dir "path to output dir" \
 # --base_model_path "Wan-AI/Wan2.1-T2V-1.3B-Diffusers" \
