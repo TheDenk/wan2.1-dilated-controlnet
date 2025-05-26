@@ -78,7 +78,7 @@ python -m inference.cli_demo \
 
 
 ## Training
-Wan 1.3B model requires `18 GB VRAM` with `bath_size=1`. But it also depends on the number of transformer blocks which default is 8 (`controlnet_transformer_num_layers` parameter in the config).  
+Wan 1.3B model requires `18 GB VRAM` with `batch_size=1`. But it also depends on the number of transformer blocks which default is 8 (`controlnet_transformer_num_layers` parameter in the config).  
 
 #### Dataset
 <a href="https://huggingface.co/datasets/nkp37/OpenVid-1M">OpenVid-1M</a> dataset was taken as the base variant. CSV files for the dataset you can find <a href="https://huggingface.co/datasets/nkp37/OpenVid-1M/tree/main/data/train">here</a>.
