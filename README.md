@@ -87,7 +87,7 @@ Wan 1.3B model requires `18 GB VRAM` with `batch_size=1`. But it also depends on
 Download dataset and prepare data. We do not use raw data to save memory.   
 Extract text embeddings. Initially all text are located in .csv file.    
 ```bash
-CUDA_VISIBLE_DEVICES=0 python prepare_text_embeddints.py \
+CUDA_VISIBLE_DEVICES=0 python prepare_text_embeddings.py \
 --csv_path "path to csv" \
 --out_embeds_dir "path to output dir" \
 --base_model_path "Wan-AI/Wan2.1-T2V-1.3B-Diffusers" \
