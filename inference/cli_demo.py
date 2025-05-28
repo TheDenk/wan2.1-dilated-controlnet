@@ -30,7 +30,7 @@ from diffusers import (
     UniPCMultistepScheduler
 )
 from diffusers.utils import export_to_video, load_video
-from controlnet_aux import HEDdetector, CannyDetector
+from controlnet_aux import HEDdetector, CannyDetector, MidasDetector
 
 from wan_controlnet import WanControlnet
 from wan_transformer import CustomWanTransformer3DModel
@@ -44,10 +44,10 @@ def init_controlnet_processor(controlnet_type):
 
 
 controlnet_mapping = {
-    'hed': HEDdetector,
     'canny': CannyDetector,
+    'hed': HEDdetector,
+    'depth': MidasDetector,
 }
-
 
 @torch.no_grad()
 def generate_video(
