@@ -3,18 +3,22 @@
 https://github.com/user-attachments/assets/97c0ece2-da42-4425-a0b6-a84929aa4d6e
 
 This repo contains the code for dilated controlnet module for Wan2.1 model.  
-Dilated controlnet has less basic blocks and also has `stride` parameter. For Wan1.3B model controlnet blocks count = 8 and stride = 3. 
+Dilated controlnet has less basic blocks and also has `stride` parameter.  
+For Wan1.3B model controlnet blocks count = 8 and stride = 3. 
+For Wan14B model controlnet blocks count = 6 and stride = 4. 
 <p>
     <img src="./resources/scheme.png" width="832" height="420" title="dilated_scheme"/>
 </p>
 
 ### Models  
 Supported models for 1.3B:
+- Canny (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-canny-v1">HF Model Link</a>) 
 - Hed (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1">HF Model Link</a>)  
 
 Supported models for 14B:
+- Canny (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-canny-v1">HF Model Link</a>)  
+- Depth (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-depth-v1">HF Model Link</a>)
 - Hed (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-hed-v1">HF Model Link</a>)  
-
 
 ### How to
 Clone repo 
