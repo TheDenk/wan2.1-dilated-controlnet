@@ -14,7 +14,7 @@ from diffusers import (
 )
 from datetime import datetime, timedelta
 from moviepy.editor import VideoFileClip
-from controlnet_aux import HEDdetector, CannyDetector
+from controlnet_aux import HEDdetector, CannyDetector, MidasDetector
 
 from wan_controlnet import WanControlnet
 from wan_transformer import CustomWanTransformer3DModel
@@ -25,10 +25,10 @@ os.makedirs("./output", exist_ok=True)
 os.makedirs("./gradio_tmp", exist_ok=True)
 
 controlnet_mapping = {
-    'hed': HEDdetector,
     'canny': CannyDetector,
+    'hed': HEDdetector,
+    'depth': MidasDetector,
 }
-
 
 def init_controlnet_processor(controlnet_type):
     if controlnet_type in ['canny', 'lineart']:
