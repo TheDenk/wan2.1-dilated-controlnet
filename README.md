@@ -128,7 +128,7 @@ python prepare_controlnet_video.py \
 For start training you need fill the config files `accelerate_config_machine_single.yaml` and `train_controlnet.sh`.  
 In `accelerate_config_machine_single.yaml` set parameter`num_processes: 1` to your GPU count.  
 In `train_controlnet.sh`:  
-1. Set `MODEL_PATH for` base CogVideoX model. Default is THUDM/CogVideoX-2b.  
+1. Set `MODEL_PATH for` base Wan2.1 model. Default is Wan-AI/Wan2.1-T2V-1.3B-Diffusers.  
 2. Set `CUDA_VISIBLE_DEVICES` (Default is 0).  
 3. Set `output_dir`, `latents_dir`, `text_embeds_dir` and `controlnet_video_dir` parameters.  
 
