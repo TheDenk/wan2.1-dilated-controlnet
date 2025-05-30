@@ -35,7 +35,7 @@ class TeaCache:
             "odd": None,
         }
         self.original_hidden_states = None
-        print("TEACACHE MEMORY HAS BEEN CREARED")
+        # print("TEACACHE MEMORY HAS BEEN CREARED")
 
     def check_for_using_cached_value(self, modulated_input):
         use_tea_cache = (self.treshold > 0.0) and (self.start_step_teacache <= self.current_step < self.end_step_teacache)

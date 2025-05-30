@@ -13,6 +13,7 @@ For Wan14B model controlnet blocks count = 6 and stride = 4.
 ### Models  
 Supported models for 1.3B:
 - Canny (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-canny-v1">HF Model Link</a>) 
+- Depth (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-depth-v1">HF Model Link</a>) 
 - Hed (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1">HF Model Link</a>)  
 
 Supported models for 14B:
@@ -39,11 +40,13 @@ pip install -r requirements.txt
 ```
 
 ### Inference examples
-#### Inference with cli
+### It is important to use correct prompt and negative prompt. 
+### For detailed information see <a href="https://github.com/Wan-Video/Wan2.1?tab=readme-ov-file#2-using-prompt-extension-2">prompt extention in original repo</a>.
+#### Simple inference with cli
 ```bash
 python -m inference.cli_demo \
-    --video_path "resources/physical-4.mp4" \
-    --prompt "A balloon filled with water was thrown to the ground, exploding and splashing water in all directions. There were graffiti on the wall, studio lighting, and commercial movie shooting." \
+    --video_path "resources/physical-1.mp4" \
+    --prompt "In a cozy kitchen, a golden retriever wearing a white chef's hat and a blue apron stands at the table, holding a sharp kitchen knife and skillfully slicing fresh tomatoes. Its tail sways gently, and its gaze is focused and gentle. There are already several neatly arranged tomatoes on the wooden chopping board in front of me. The kitchen has soft lighting, with various kitchen utensils hanging on the walls and several pots of green plants placed on the windowsill." \
     --controlnet_type "hed" \
     --controlnet_stride 3 \
     --base_model_path Wan-AI/Wan2.1-T2V-1.3B-Diffusers \
@@ -60,8 +63,8 @@ python -m inference.gradio_web_demo \
 #### Detailed Inference
 ```bash
 python -m inference.cli_demo \
-    --video_path "resources/physical-4.mp4" \
-    --prompt "A balloon filled with water was thrown to the ground, exploding and splashing water in all directions. There were graffiti on the wall, studio lighting, and commercial movie shooting." \
+    --video_path "resources/physical-1.mp4" \
+    --prompt "In a cozy kitchen, a golden retriever wearing a white chef's hat and a blue apron stands at the table, holding a sharp kitchen knife and skillfully slicing fresh tomatoes. Its tail sways gently, and its gaze is focused and gentle. There are already several neatly arranged tomatoes on the wooden chopping board in front of me. The kitchen has soft lighting, with various kitchen utensils hanging on the walls and several pots of green plants placed on the windowsill." \
     --controlnet_type "hed" \
     --base_model_path Wan-AI/Wan2.1-T2V-1.3B-Diffusers \
     --controlnet_model_path TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1 \
@@ -77,7 +80,8 @@ python -m inference.cli_demo \
     --negative_prompt "Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards" \
     --seed 42 \
     --out_fps 16 \
-    --output_path "result.mp4"
+    --output_path "result.mp4" \
+    --teacache_treshold 0.3
 ```
 
 

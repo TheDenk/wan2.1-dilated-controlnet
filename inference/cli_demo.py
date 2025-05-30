@@ -187,7 +187,7 @@ if __name__ == "__main__":
     parser.add_argument("--video_height", type=int, default=480, help="Output video height")
     parser.add_argument("--video_width", type=int, default=832, help="Output video width")
     parser.add_argument("--num_frames", type=int, default=81, help="Output frames count")
-    parser.add_argument("--negative_prompt", type=str, default="bad quality, worst quality", help="Negative prompt")
+    parser.add_argument("--negative_prompt", type=str, default="In a cozy kitchen, a golden retriever wearing a white chef's hat and a blue apron stands at the table, holding a sharp kitchen knife and skillfully slicing fresh tomatoes. Its tail sways gently, and its gaze is focused and gentle. There are already several neatly arranged tomatoes on the wooden chopping board in front of me. The kitchen has soft lighting, with various kitchen utensils hanging on the walls and several pots of green plants placed on the windowsill.", help="Negative prompt")
     parser.add_argument("--seed", type=int, default=42, help="The seed for reproducibility")
     parser.add_argument("--out_fps", type=int, default=16, help="FPS of output video")
     parser.add_argument("--teacache_treshold", type=float, default=0.0, help="TeaCache value. Best from [0.3, 0.5, 0.7, 0.9]")
