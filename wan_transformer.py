@@ -4,6 +4,7 @@ import torch
 from diffusers import WanTransformer3DModel
 from diffusers.models.modeling_outputs import Transformer2DModelOutput
 from diffusers.utils import USE_PEFT_BACKEND, logging, scale_lora_layers, unscale_lora_layers
+from wan_teacache import TeaCache
 
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
@@ -21,6 +22,7 @@ class CustomWanTransformer3DModel(WanTransformer3DModel):
         controlnet_states: torch.Tensor = None,
         controlnet_weight: Optional[float] = 1.0,
         controlnet_stride: Optional[int] = 1,
+        teacache: Optional[TeaCache] = None,
     ) -> Union[torch.Tensor, Dict[str, torch.Tensor]]:
         if attention_kwargs is not None:
             attention_kwargs = attention_kwargs.copy()
@@ -51,25 +53,36 @@ class CustomWanTransformer3DModel(WanTransformer3DModel):
         temb, timestep_proj, encoder_hidden_states, encoder_hidden_states_image = self.condition_embedder(
             timestep, encoder_hidden_states, encoder_hidden_states_image
         )
-        timestep_proj = timestep_proj.unflatten(1, (6, -1))
-
-        if encoder_hidden_states_image is not None:
-            encoder_hidden_states = torch.concat([encoder_hidden_states_image, encoder_hidden_states], dim=1)
-
-        # 4. Transformer blocks
-        if torch.is_grad_enabled() and self.gradient_checkpointing:
-            for i, block in enumerate(self.blocks):
-                hidden_states = self._gradient_checkpointing_func(
-                    block, hidden_states, encoder_hidden_states, timestep_proj, rotary_emb
-                )
-                if (controlnet_states is not None) and (i % controlnet_stride == 0) and (i // controlnet_stride < len(controlnet_states)):
-                    hidden_states = hidden_states + controlnet_states[i // controlnet_stride] * controlnet_weight
+        use_cached_value = False
+        original_hidden_states = None
+        if (teacache is not None) and (teacache.treshold > 0.0):
+            original_hidden_states = hidden_states.clone()
+            use_cached_value = teacache.check_for_using_cached_value(temb)
+            
+        if use_cached_value:
+            hidden_states = teacache.use_cache(hidden_states) 
         else:
-            for i, block in enumerate(self.blocks):
-                hidden_states = block(hidden_states, encoder_hidden_states, timestep_proj, rotary_emb)
-                if (controlnet_states is not None) and (i % controlnet_stride == 0) and (i // controlnet_stride < len(controlnet_states)):
-                    hidden_states = hidden_states + controlnet_states[i // controlnet_stride] * controlnet_weight
-
+            timestep_proj = timestep_proj.unflatten(1, (6, -1))
+    
+            if encoder_hidden_states_image is not None:
+                encoder_hidden_states = torch.concat([encoder_hidden_states_image, encoder_hidden_states], dim=1)
+    
+            # 4. Transformer blocks
+            if torch.is_grad_enabled() and self.gradient_checkpointing:
+                for i, block in enumerate(self.blocks):
+                    hidden_states = self._gradient_checkpointing_func(
+                        block, hidden_states, encoder_hidden_states, timestep_proj, rotary_emb
+                    )
+                    if (controlnet_states is not None) and (i % controlnet_stride == 0) and (i // controlnet_stride < len(controlnet_states)):
+                        hidden_states = hidden_states + controlnet_states[i // controlnet_stride] * controlnet_weight
+            else:
+                for i, block in enumerate(self.blocks):
+                    hidden_states = block(hidden_states, encoder_hidden_states, timestep_proj, rotary_emb)
+                    if (controlnet_states is not None) and (i % controlnet_stride == 0) and (i // controlnet_stride < len(controlnet_states)):
+                        hidden_states = hidden_states + controlnet_states[i // controlnet_stride] * controlnet_weight
+                        
+        if (teacache is not None) and (teacache.treshold > 0.0):
+            teacache.update(hidden_states - original_hidden_states)
         # 5. Output norm, projection & unpatchify
         shift, scale = (self.scale_shift_table + temb.unsqueeze(1)).chunk(2, dim=1)
 

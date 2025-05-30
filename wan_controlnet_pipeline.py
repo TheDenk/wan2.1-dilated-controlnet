@@ -35,6 +35,7 @@ from diffusers.pipelines.wan.pipeline_output import WanPipelineOutput
 
 from wan_transformer import CustomWanTransformer3DModel
 from wan_controlnet import WanControlnet
+from wan_teacache import TeaCache
 
 if is_torch_xla_available():
     import torch_xla.core.xla_model as xm
@@ -423,6 +424,9 @@ class WanControlnetPipeline(DiffusionPipeline, WanLoraLoaderMixin):
         controlnet_guidance_start: float = 0.0,
         controlnet_guidance_end: float = 1.0,
         controlnet_stride: int = 1,
+
+        teacache_state: Optional[TeaCache]= None,
+        teacache_treshold: float = 0.0,
     ):
         r"""
         The call function to the pipeline for generation.
@@ -495,6 +499,14 @@ class WanControlnetPipeline(DiffusionPipeline, WanLoraLoaderMixin):
                 indicating whether the corresponding generated image contains "not-safe-for-work" (nsfw) content.
         """
 
+        teacache = teacache_state or None
+        if (teacache is None) and (teacache_treshold > 0.0):
+            teacache = TeaCache(
+                num_inference_steps=num_inference_steps, 
+                model_name="14B" if len(self.transformer.blocks) == 40 else "1.3B",
+                treshold=teacache_treshold
+            )
+                
         if isinstance(callback_on_step_end, (PipelineCallback, MultiPipelineCallbacks)):
             callback_on_step_end_tensor_inputs = callback_on_step_end.tensor_inputs
 
@@ -621,6 +633,7 @@ class WanControlnetPipeline(DiffusionPipeline, WanLoraLoaderMixin):
                     controlnet_states=controlnet_states,
                     controlnet_weight=controlnet_weight,
                     controlnet_stride=controlnet_stride,
+                    teacache=teacache,
                     return_dict=False,
                 )[0]
 
@@ -633,6 +646,7 @@ class WanControlnetPipeline(DiffusionPipeline, WanLoraLoaderMixin):
                         controlnet_states=controlnet_states,
                         controlnet_weight=controlnet_weight,
                         controlnet_stride=controlnet_stride,
+                        teacache=teacache,
                         return_dict=False,
                     )[0]
                     noise_pred = noise_uncond + guidance_scale * (noise_pred - noise_uncond)

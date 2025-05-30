@@ -63,6 +63,7 @@ def generate_video(
     output_path: str = "./output.mp4",
     num_inference_steps: int = 50,
     guidance_scale: float = 5.0,
+    teacache_treshold: float = 0.0,
     video_height: int = 480,
     video_width: int = 832,
     num_frames: int = 81,
@@ -90,9 +91,10 @@ def generate_video(
     - output_path (str): The path where the generated video will be saved.
     - num_inference_steps (int): Number of steps for the inference process. More steps can result in better quality.
     - guidance_scale (float): The scale for classifier-free guidance. Higher values can lead to better alignment with the prompt.
-    - video_height (int): Output video height,
-    - video_width (int): Output video width,
-    - num_frames (int): Output frames count,
+    - teacache_treshold (float): TeaCache value. Best from [0.3, 0.5, 0.7, 0.9].
+    - video_height (int): Output video height.
+    - video_width (int): Output video width.
+    - num_frames (int): Output frames count.
     - seed (int): The seed for reproducibility.
     - out_fps (int): FPS of output video.
     """
@@ -147,6 +149,8 @@ def generate_video(
         controlnet_guidance_end=controlnet_guidance_end,
         controlnet_weight=controlnet_weight,
         controlnet_stride=controlnet_stride,
+
+        teacache_treshold=teacache_treshold,
     ).frames[0]
     # output = [x.convert("RGB") for x in output]
     export_to_video(output, output_path, fps=out_fps)
@@ -183,9 +187,10 @@ if __name__ == "__main__":
     parser.add_argument("--video_height", type=int, default=480, help="Output video height")
     parser.add_argument("--video_width", type=int, default=832, help="Output video width")
     parser.add_argument("--num_frames", type=int, default=81, help="Output frames count")
-    parser.add_argument("--negative_prompt", type=str, default="bad quality, worst quality", help="Negative prompt")
+    parser.add_argument("--negative_prompt", type=str, default="In a cozy kitchen, a golden retriever wearing a white chef's hat and a blue apron stands at the table, holding a sharp kitchen knife and skillfully slicing fresh tomatoes. Its tail sways gently, and its gaze is focused and gentle. There are already several neatly arranged tomatoes on the wooden chopping board in front of me. The kitchen has soft lighting, with various kitchen utensils hanging on the walls and several pots of green plants placed on the windowsill.", help="Negative prompt")
     parser.add_argument("--seed", type=int, default=42, help="The seed for reproducibility")
     parser.add_argument("--out_fps", type=int, default=16, help="FPS of output video")
+    parser.add_argument("--teacache_treshold", type=float, default=0.0, help="TeaCache value. Best from [0.3, 0.5, 0.7, 0.9]")
     parser.add_argument("--lora_path", type=str, default=None, help="The path of the LoRA weights to be used")
     parser.add_argument("--lora_rank", type=int, default=128, help="The rank of the LoRA weights")
     args = parser.parse_args()
@@ -211,4 +216,5 @@ if __name__ == "__main__":
         out_fps=args.out_fps,
         lora_path=args.lora_path,
         lora_rank=args.lora_rank,
+        teacache_treshold=args.teacache_treshold,
     )

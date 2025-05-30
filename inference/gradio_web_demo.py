@@ -47,7 +47,7 @@ def save_video(tensor):
 def convert_to_gif(video_path):
     clip = VideoFileClip(video_path)
     clip = clip.set_fps(16)
-    clip = clip.resize(height=240)
+    clip = clip.resize(height=480)
     gif_path = video_path.replace(".mp4", ".gif")
     clip.write_gif(gif_path, fps=16)
     return gif_path
@@ -100,13 +100,14 @@ def main(args):
 
 
     def infer(
-            prompt: str, controlnet_frames: list, num_inference_steps: int, guidance_scale: float, seed: int, width: int, height: int, num_frames: int, 
-            controlnet_guidance_start: float, controlnet_guidance_end: float, controlnet_weight: float, controlnet_stride: int, progress=gr.Progress(track_tqdm=True)
+            prompt: str, negative_prompt: str, controlnet_frames: list, num_inference_steps: int, guidance_scale: float, seed: int, width: int, height: int, num_frames: int, 
+            controlnet_guidance_start: float, controlnet_guidance_end: float, controlnet_weight: float, controlnet_stride: int, teacache_treshold: float, progress=gr.Progress(track_tqdm=True)
         ):
         torch.cuda.empty_cache()
+
         output = pipe(
             prompt=prompt,
-            negative_prompt="bad quality, worst quality",
+            negative_prompt=negative_prompt,
             height=height,
             width=width,
             num_frames=num_frames,
@@ -116,10 +117,12 @@ def main(args):
             output_type="pil",
         
             controlnet_frames=controlnet_frames,
-            controlnet_guidance_start=float(controlnet_guidance_start.value if hasattr(controlnet_guidance_start, 'value') else controlnet_guidance_start),
-            controlnet_guidance_end=float(controlnet_guidance_end.value if hasattr(controlnet_guidance_end, 'value') else controlnet_guidance_end),
-            controlnet_weight=float(controlnet_weight.value if hasattr(controlnet_weight, 'value') else controlnet_weight),
-            controlnet_stride=int(controlnet_stride.value if hasattr(controlnet_stride, 'value') else controlnet_stride),
+            controlnet_guidance_start=controlnet_guidance_start,
+            controlnet_guidance_end=controlnet_guidance_end,
+            controlnet_weight=controlnet_weight,
+            controlnet_stride=controlnet_stride,
+
+            teacache_treshold=float(teacache_treshold.value if hasattr(teacache_treshold, 'value') else teacache_treshold),
         ).frames[0]
 
         return output
@@ -138,6 +141,12 @@ def main(args):
                         download_video_button = gr.File(label="📥 Download Video", visible=False)
                         download_gif_button = gr.File(label="📥 Download GIF", visible=False)
                 prompt = gr.Textbox(label="Prompt (Less than 200 Words)", placeholder="Enter your prompt here", lines=5)
+                negative_prompt = gr.Textbox(
+                    label="Negative Prompt (Less than 200 Words)", 
+                    value="Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards", 
+                    placeholder="Enter your prompt here", 
+                    lines=3
+                )
 
                 with gr.Column():
                     gr.Markdown(
@@ -158,6 +167,8 @@ def main(args):
                         controlnet_guidance_end = gr.Number(label="Controlnet Guidance End", interactive=True, precision=2, value=0.8, minimum=0.0, maximum=1.0, step=0.05)
                         controlnet_weight = gr.Number(label="Controlnet Weight", interactive=True, value=0.8, precision=2, minimum=0.0, maximum=1.0, step=0.05)
                         controlnet_stride = gr.Number(label="Controlnet Stride", interactive=True, value=3, minimum=1, step=1)
+                    with gr.Row():
+                        teacache_treshold = gr.Number(label="TeaCache Treshold. Less coef -> Better quality, but longer inference.", interactive=True, value=0.3, precision=2, minimum=0.0, maximum=1.5, step=0.05)
                     
                     generate_button = gr.Button("🎬 Generate Video")
 
@@ -167,12 +178,13 @@ def main(args):
                     download_video_button = gr.File(label="📥 Download Video", visible=False)
                     download_gif_button = gr.File(label="📥 Download GIF", visible=False)
 
-        def generate(prompt, video_input, num_inference_steps, guidance_scale, seed, width, height, num_frames, progress=gr.Progress(track_tqdm=True)):
+        def generate(prompt, negative_prompt, video_input, num_inference_steps, guidance_scale, seed, width, height, num_frames, 
+                controlnet_guidance_start, controlnet_guidance_end, controlnet_weight, controlnet_stride, teacache_treshold, progress=gr.Progress(track_tqdm=True)):
             video = load_video(video_input)[:num_frames]
             controlnet_frames = [controlnet_processor(x) for x in video]
             tensor = infer(
-                prompt, controlnet_frames, num_inference_steps, guidance_scale, seed, width, height, num_frames, 
-                controlnet_guidance_start, controlnet_guidance_end, controlnet_weight, controlnet_stride, progress=progress
+                prompt, negative_prompt, controlnet_frames, num_inference_steps, guidance_scale, seed, width, height, num_frames, 
+                controlnet_guidance_start, controlnet_guidance_end, controlnet_weight, controlnet_stride, teacache_treshold, progress=progress
             )
             video_path = save_video(tensor)
             video_update = gr.update(visible=True, value=video_path)
@@ -183,7 +195,8 @@ def main(args):
 
         generate_button.click(
             generate,
-            inputs=[prompt, video_input, num_inference_steps, guidance_scale, seed, width, height, num_frames],
+            inputs=[prompt, negative_prompt, video_input, num_inference_steps, guidance_scale, seed, width, height, num_frames, 
+                controlnet_guidance_start, controlnet_guidance_end, controlnet_weight, controlnet_stride, teacache_treshold, ],
             outputs=[video_output, download_video_button, download_gif_button],
         )
     demo.launch()
