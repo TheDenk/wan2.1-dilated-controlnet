@@ -11,15 +11,14 @@ For Wan14B model controlnet blocks count = 6 and stride = 4.
 </p>
 
 ### Models  
-Supported models for 1.3B:
-- Canny (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-canny-v1">HF Model Link</a>) 
-- Depth (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-depth-v1">HF Model Link</a>) 
-- Hed (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1">HF Model Link</a>)  
-
-Supported models for 14B:
-- Canny (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-canny-v1">HF Model Link</a>)  
-- Depth (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-depth-v1">HF Model Link</a>)
-- Hed (<a href="https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-hed-v1">HF Model Link</a>)  
+| Model | Processor | Huggingface Link |
+|-------|:-----------:|:------------------:|
+| 1.3B  | Canny     | [Link](https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-canny-v1)             |
+| 1.3B  | HED       | [Link](https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-hed-v1)             |
+| 1.3B  | Depth     | [Link](https://huggingface.co/TheDenk/wan2.1-t2v-1.3b-controlnet-depth-v1)             |
+| 14B   | Canny     | [Link](https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-canny-v1)             |
+| 14B   | HED       | [Link](https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-hed-v1)             |
+| 14B   | Depth     | [Link](https://huggingface.co/TheDenk/wan2.1-t2v-14b-controlnet-depth-v1)             |
 
 ### How to
 Clone repo 
