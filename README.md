@@ -10,6 +10,12 @@ For Wan14B model controlnet blocks count = 6 and stride = 4.
     <img src="./resources/scheme.png" width="832" height="420" title="dilated_scheme"/>
 </p>
 
+### [TeaCache](https://github.com/ali-vilab/TeaCache) is available  
+Use `--teacache_treshold` parameter for increasing speed of generation (This example for 14B model).  
+
+https://github.com/user-attachments/assets/a3181767-48b2-49a0-b877-3d42ddac6592
+
+
 ### Models  
 | Model | Processor | Huggingface Link |
 |-------|:-----------:|:------------------:|
