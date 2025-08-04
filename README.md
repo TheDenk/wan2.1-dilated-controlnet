@@ -15,6 +15,8 @@ Use `--teacache_treshold` parameter for increasing speed of generation (This exa
 
 https://github.com/user-attachments/assets/a3181767-48b2-49a0-b877-3d42ddac6592
 
+### For ComfyUI
+Use the cool [ComfyUI-WanVideoWrapper](https://github.com/kijai/ComfyUI-WanVideoWrapper).  
 
 ### Models  
 | Model | Processor | Huggingface Link |
